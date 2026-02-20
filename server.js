@@ -2,11 +2,14 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 import pino from "pino";
-import makeWASocket, {
+import * as baileys from "@whiskeysockets/baileys";
+
+const {
+  default: makeWASocket,
   useMultiFileAuthState,
   fetchLatestBaileysVersion,
   jidNormalizedUser
-} from "@whiskeysockets/baileys";
+} = baileys;
 
 const app = express();
 app.use(cors());
@@ -29,22 +32,23 @@ app.post("/pair", async (req, res) => {
     const { state, saveCreds } = await useMultiFileAuthState("./auth");
     const { version } = await fetchLatestBaileysVersion();
 
-    sock = makeWASocket({
+    const s = makeWASocket({
       version,
       auth: state,
       printQRInTerminal: false,
       logger: pino({ level: "silent" })
     });
 
-    const code = await sock.requestPairingCode(number);
+    const code = await s.requestPairingCode(number);
 
     res.json({
       status: true,
       code
     });
 
-    sock.ev.on("creds.update", saveCreds);
+    s.ev.on("creds.update", saveCreds);
   } catch (err) {
+    console.log("PAIR ERROR:", err);
     res.json({
       status: false,
       message: "Pairing code imekataa. Jaribu tena."
@@ -67,7 +71,7 @@ async function startBot() {
   });
 
   sock.ev.on("connection.update", ({ connection }) => {
-    if (connection === "open") console.log("🤖 COBRA BROKEN BOT CONNECTED");
+    if (connection === "open") console.log("🤖 BROKEN LORD BOT CONNECTED");
     if (connection === "close") {
       console.log("⚠️ Connection closed. Restarting...");
       startBot();
