@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🔧 Installing COBRA BROKEN WhatsApp Bot..."
+echo "🔧 Installing COBRA BROKEN WhatsApp Bot (CODE + QR MODE)..."
 
 apt update -y
 apt upgrade -y
