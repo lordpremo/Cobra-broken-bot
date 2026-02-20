@@ -4,12 +4,11 @@ import axios from "axios";
 import pino from "pino";
 import * as baileys from "@whiskeysockets/baileys";
 
-const {
-  default: makeWASocket,
-  useMultiFileAuthState,
-  fetchLatestBaileysVersion,
-  jidNormalizedUser
-} = baileys;
+// UNIVERSAL IMPORT (WORKS ON ALL BAILEYS VERSIONS)
+const makeWASocket = baileys.default;
+const useMultiFileAuthState = baileys.useMultiFileAuthState;
+const fetchLatestBaileysVersion = baileys.fetchLatestBaileysVersion;
+const jidNormalizedUser = baileys.jidNormalizedUser;
 
 const app = express();
 app.use(cors());
